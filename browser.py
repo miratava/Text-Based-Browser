@@ -1,3 +1,5 @@
+import sys
+import os
 
 nytimes_com = '''
 This New Liquid Is Magnetic, and Mesmerizing
@@ -34,11 +36,29 @@ Twitter and Square Chief Executive Officer Jack Dorsey
  Tuesday, a signal of the strong ties between the Silicon Valley giants.
 '''
 
-# write your code here
-input_string = input()
-if input_string == "bloomberg.com":
-    print(bloomberg_com)
-elif input_string == "nytimes.com":
-    print(nytimes_com)
-elif input_string == "exit":
-    print()
+pages = {"bloomberg.com": bloomberg_com, "nytimes.com": nytimes_com}
+args = sys.argv
+directory = args[1]
+try:
+    os.mkdir(directory)
+except FileExistsError:
+    pass
+dot = "."
+url = ""
+message = "Error"
+exit_from_program = "exit"
+while url != exit_from_program:
+    url = input()
+    if dot in url:
+        for item in pages.items():
+            if url == item[0]:
+                print(item[1])
+                file_name = directory + "\\" + item[0].split(dot)[0]
+                with open(file_name, "w") as f:
+                    f.write(item[1])
+            else:
+                print(message)
+                continue
+    else:
+        print(message)
+        continue
