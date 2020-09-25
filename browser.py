@@ -1,9 +1,6 @@
 import sys
 import os
-<<<<<<< HEAD
-=======
 import enum
->>>>>>> Added classes
 
 nytimes_com = '''
 This New Liquid Is Magnetic, and Mesmerizing
@@ -38,36 +35,6 @@ Twitter CEO Jack Dorsey Gives Talk at Apple Headquarters
 Twitter and Square Chief Executive Officer Jack Dorsey 
  addressed Apple Inc. employees at the iPhone maker’s headquarters
  Tuesday, a signal of the strong ties between the Silicon Valley giants.
-<<<<<<< HEAD
-'''
-
-pages = {"bloomberg.com": bloomberg_com, "nytimes.com": nytimes_com}
-args = sys.argv
-directory = args[1]
-try:
-    os.mkdir(directory)
-except FileExistsError:
-    pass
-dot = "."
-url = ""
-message = "Error"
-exit_from_program = "exit"
-while url != exit_from_program:
-    url = input()
-    if dot in url:
-        for item in pages.items():
-            if url == item[0]:
-                print(item[1])
-                file_name = directory + "\\" + item[0].split(dot)[0]
-                with open(file_name, "w") as f:
-                    f.write(item[1])
-            else:
-                print(message)
-                continue
-    else:
-        print(message)
-        continue
-=======
 i'''
 
 class Page():
