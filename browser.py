@@ -37,7 +37,8 @@ Twitter and Square Chief Executive Officer Jack Dorsey
  Tuesday, a signal of the strong ties between the Silicon Valley giants.
 i'''
 
-class Page():
+
+class Page:
 
     def __init__(self, url, text):
         self.url = url
@@ -53,13 +54,18 @@ class Page():
 class Status(enum.Enum):
     ok = 1
     error = 2
+    exit = 3
 
 
-class Browser():
+class Browser:
     error_message = "Error"
 
-    def load_page(self, str_input, directory, page):
-        self.create_file(str_input, directory, page)
+    def __init__(self):
+        self.pages = []
+
+    def load_page(self, directory, page):
+        file_name = self.create_file(directory, page)
+        self.pages.append(file_name)
         return Status.ok, page.get_text()
 
     @staticmethod
@@ -72,17 +78,34 @@ class Browser():
             os.mkdir(path)
         return path
 
-    @staticmethod
-    def create_file(str_input, directory, page):
+    def create_file(self, directory, page):
         path = self.create_directory(directory)
         dot = "."
         file_name = os.path.join(path, page.get_url().split(dot)[0])
-       # if not os.path.isfile(file_name):
-        with open(file_name, "w") as f:
-            f.write(page.get_text())
+        if not os.path.isfile(file_name):
+            with open(file_name, "w") as f:
+                f.write(page.get_text())
+        return file_name
 
     def get_error_message(self):
         return self.error_message
+
+    def process_input_data(self, str_input):
+        command_exit = "exit"
+        command_back = "back"
+        if str_input == command_exit:
+            return Status.exit, None
+        if str_input == command_back:
+            return self.go_back()
+        return Status.error, self.error_message
+
+    def go_back(self):
+        page_in_stack = -2
+        if len(self.pages) <= 1:
+            return Status.ok, None
+        else:
+            with open(self.pages.pop(page_in_stack)) as f:
+                return Status.ok, f.read()
 
 
 def main():
@@ -97,14 +120,16 @@ def main():
         str_input = input()
         if str_input in urls:
             page = Page(str_input, urls.get(str_input))
-            status, value = browser.load_page(str_input, directory, page)
+            status, value = browser.load_page(directory, page)
+            print(value)
+        else:
+            status, value = browser.process_input_data(str_input)
             if value is not None:
                 print(value)
-            if status is Status.error:
+            elif status is Status.error:
                 continue
-        else:
-            print(browser.error_message)
-            continue
+            elif status is Status.exit:
+                break
 
 
 main()
